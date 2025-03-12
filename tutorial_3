@@ -1,0 +1,16 @@
+import numpy as np
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+# Example dataset (2 features, 2 classes)
+X = np.array([[2, 3], [3, 5], [5, 8], [6, 10],  # Class 0
+              [7, 2], [8, 3], [9, 4], [10, 5]]) # Class 1
+y = np.array([0, 0, 0, 0, 1, 1, 1, 1])  # Labels
+
+# Fit LDA model
+lda = LinearDiscriminantAnalysis(n_components=1)  # n_components = min(classes-1, features)
+lda.fit(X, y)
+
+# Get the LDA transformation matrix (2x1 in this case)
+lda_matrix = lda.scalings_
+
+print("LDA Transformation Matrix:\n", lda_matrix)
