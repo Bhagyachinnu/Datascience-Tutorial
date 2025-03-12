@@ -1,0 +1,49 @@
+import pandas as pd  # Importing pandas for data manipulation
+import numpy as np  # Importing numpy for numerical operations
+import statsmodels.api as sm  # Importing statsmodels for statistical modeling
+from sklearn.model_selection import train_test_split  # Importing train-test split function
+from sklearn.linear_model import LogisticRegression  # Importing logistic regression model
+from sklearn.metrics import accuracy_score  # Importing accuracy score function
+
+# Creating a new dataset: Customer Purchase Prediction
+data = pd.DataFrame({
+    'Age': [22, 25, 47, 52, 46, 56, 55, 60, 62, 61, 18, 19, 23, 24, 40, 42, 37, 45, 50, 53],  # Customer Age
+    'Annual_Income': [50, 60, 80, 75, 85, 90, 120, 130, 95, 70, 20, 30, 40, 45, 65, 70, 55, 73, 78, 88],  # Annual Income (in thousands)
+    'Spending_Score': [60, 65, 20, 30, 50, 40, 85, 90, 55, 35, 75, 80, 70, 72, 48, 45, 55, 50, 42, 39],  # Spending score (1-100)
+    'Purchased': [1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0]  # Purchase status (1 = Yes, 0 = No)
+})
+
+# Defining independent variables (Age, Annual Income, Spending Score)
+X = data[['Age', 'Annual_Income', 'Spending_Score']]
+
+# Defining dependent variable (Purchased)
+Y = data['Purchased']
+
+# Splitting dataset into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+# Fitting the logistic regression model
+model = LogisticRegression()
+model.fit(X_train, Y_train)
+
+# Making predictions on the test set
+Y_pred = model.predict(X_test)
+
+# Calculating accuracy of the model
+accuracy = accuracy_score(Y_test, Y_pred)
+
+# Printing results
+print(f'Accuracy: {accuracy:.2f}')  # Printing accuracy score
+
+# Predicting values for unknown inputs
+new_customers = pd.DataFrame({
+    'Age': [29, 41, 50],  # New customer ages
+    'Annual_Income': [65, 85, 100],  # Annual income in thousands
+    'Spending_Score': [55, 45, 60]  # Spending score (1-100)
+})
+
+predictions = model.predict(new_customers)  # Predict purchase decision
+
+# Displaying predictions
+for i, pred in enumerate(predictions):
+    print(f'Customer {i+1}: Purchase Prediction = {"Yes" if pred == 1 else "No"}')
